@@ -4,16 +4,22 @@ class BinaryTree:
     def __init__(self, root):
         self.root = Node(root)  # A raiz da árvore
 
-    # Método para adicionar um nó à árvore
-    def insert_left(self, parent, value):
-        parent.left = Node(value)
+    # Método recursivo para construir a árvore balanceada
+    def insert_balanced(self, nodes):
+        """
+        Insere nós de forma balanceada em uma árvore binária.
+        :param nodes: Lista de valores a serem inseridos.
+        """
+        if not nodes:
+            return None
+        mid = len(nodes) // 2
+        node = Node(nodes[mid])
+        node.left = self.insert_balanced(nodes[:mid])
+        node.right = self.insert_balanced(nodes[mid+1:])
+        return node
 
-    def insert_right(self, parent, value):
-        parent.right = Node(value)
-
-    # Método de travessia para gerar a visualização
-    def traverse(self, node):
-        if node:
-            print(node.value)
-            self.traverse(node.left)
-            self.traverse(node.right)
+    # Método para inicializar a árvore com valores
+    def create_balanced_tree(self, n):
+        # Gera uma lista com números de 1 a n
+        values = list(range(1, n + 1))
+        self.root = self.insert_balanced(values)
